@@ -5,4 +5,5 @@ abstract class RouteNames {
   static const String opt_confirmation = '/otp_confirmation';
   static const String landing = '/landing';
   static const String cash_out = '/cash_out';
+  static const String add_money = '/add_money';
 }

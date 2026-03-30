@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_banking/core/theme/colors.dart';
 
+import '../../../core/navigation/app_navigator.dart';
+
 class CashOutScreen extends StatefulWidget {
   const CashOutScreen({super.key});
 
@@ -18,7 +20,7 @@ class _CashOutScreenState extends State<CashOutScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppNavigator.pop(),
         ),
         title: const Text(
           'Cash Out',

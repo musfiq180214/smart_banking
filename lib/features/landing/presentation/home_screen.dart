@@ -256,8 +256,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return GestureDetector(
           onTap: () {
             if (item.title == "Cash Out") {
-              AppNavigator.goTo(RouteNames.cash_out);
-            } else {
+              AppNavigator.pushTo(RouteNames.cash_out);
+            }else if (item.title == "Add Money") {
+              AppNavigator.pushTo(RouteNames.add_money);
+            }
+            else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("${item.title} clicked")),
               );
