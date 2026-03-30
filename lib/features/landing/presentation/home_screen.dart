@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../../core/navigation/app_navigator.dart';
 import '../../../core/navigation/route_names.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/utils/custom_dialog.dart';
+import '../../../core/utils/enums.dart';
+import '../../../core/widgets/language_switch.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,98 +14,191 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); // Add this
+
   // State variables to track expansion
   bool _isServicesExpanded = false;
   bool _isPayBillExpanded = false;
   bool _isRemittanceExpanded = false;
   bool _isBalanceVisible = false; // Add this line
+  Widget _buildSideDrawer() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: Drawer(
+        backgroundColor: Colors.white,
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Drawer Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "ePay Menu",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    // Language Switcher Toggle aligned to the left
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: LanguageToggle(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              // Menu Items
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    _drawerItem(Icons.home, "Home"),
+                    _drawerItem(Icons.person, "Profile"),
+                    _drawerItem(Icons.receipt_long, "Statements"),
+                    _drawerItem(Icons.speed, "Limits"),
+                    _drawerItem(Icons.confirmation_number, "Coupons"),
+                    _drawerItem(Icons.stars, "Points"),
+                    _drawerItem(Icons.edit_note, "Information Update"),
+                    _drawerItem(Icons.settings, "Settings"),
+                    _drawerItem(Icons.group_add, "Nominee Update"),
+                    _drawerItem(Icons.support_agent, "Support"),
+                    _drawerItem(Icons.share, "Refer ekPay App"),
+                    const Divider(),
+                    _drawerItem(Icons.logout, "Logout", isLogout: true),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
+  Widget _drawerItem(IconData icon, String title, {bool isLogout = false}) {
+    return ListTile(
+      leading: Icon(icon, color: isLogout ? Colors.red : primaryColor),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isLogout ? Colors.red : primaryColor, // Logout text red for clarity
+          fontWeight: isLogout ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        Navigator.pop(context); // Close drawer
+        if (isLogout) {
+          // Navigate to Login Screen
+          AppNavigator.goTo(RouteNames.login);
+        } else {
+          showCustomSnackBar(
+            context,
+            message: "$title clicked",
+            type: MessageType.success,
+          );
+
+        }
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 1. Header with Blue background transition
-          _buildHeader(),
-          _buildBalanceCard(),
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: _buildSideDrawer(),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 1. Header with Blue background transition
+            _buildHeader(),
+            _buildBalanceCard(),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
 
-                _buildMenuGrid(
-                  [
-                    _MenuData("Cash In", "assets/menus/cash_in.png"),
-                    _MenuData("Cash Out", "assets/menus/cash_out.png"),
-                    _MenuData("Add Money", "assets/menus/add_money.png"),
-                    _MenuData("Send Money", "assets/menus/send_money.png"),
-                    _MenuData(
-                        "Mobile Recharge", "assets/menus/mobile_recharge.png"),
-                    _MenuData("MRT Recharge", "assets/menus/mrt.png"),
-                    _MenuData("Make Payment", "assets/menus/make_payment.png"),
-                    _MenuData("Express Card", "assets/menus/express.png"),
-                    _MenuData("Self Bill", "assets/menus/cash_in.png"),
-                    _MenuData("Donation", "assets/menus/cash_in.png"),
-                    _MenuData("Insurance", "assets/menus/cash_in.png"),
-                  ],
-                  _isServicesExpanded,
-                ),
-                _buildToggleButton(
-                  _isServicesExpanded,
-                      () =>
-                      setState(() =>
-                      _isServicesExpanded = !_isServicesExpanded),
-                ),
+                  _buildMenuGrid(
+                    [
+                      _MenuData("Cash In", "assets/menus/cash_in.png"),
+                      _MenuData("Cash Out", "assets/menus/cash_out.png"),
+                      _MenuData("Add Money", "assets/menus/add_money.png"),
+                      _MenuData("Send Money", "assets/menus/send_money.png"),
+                      _MenuData(
+                          "Mobile Recharge", "assets/menus/mobile_recharge.png"),
+                      _MenuData("MRT Recharge", "assets/menus/mrt.png"),
+                      _MenuData("Make Payment", "assets/menus/make_payment.png"),
+                      _MenuData("Express Card", "assets/menus/express.png"),
+                      _MenuData("Self Bill", "assets/menus/cash_in.png"),
+                      _MenuData("Donation", "assets/menus/cash_in.png"),
+                      _MenuData("Insurance", "assets/menus/cash_in.png"),
+                    ],
+                    _isServicesExpanded,
+                  ),
+                  _buildToggleButton(
+                    _isServicesExpanded,
+                        () =>
+                        setState(() =>
+                        _isServicesExpanded = !_isServicesExpanded),
+                  ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // 3. Pay Bill Section
-                _buildSectionHeader("Pay Bill"),
-                _buildMenuGrid(
-                  [
-                    _MenuData("Electricity", "assets/menus/electricity.png"),
-                    _MenuData("Gas", "assets/menus/gas.png"),
-                    _MenuData("Water", "assets/menus/water.png"),
-                    _MenuData("Internet", "assets/menus/internet.png"),
-                    _MenuData("Telephone", "assets/menus/telephone.png"),
-                    _MenuData("Credit Card", "assets/menus/card.png"),
-                    _MenuData("Govt Fees", "assets/menus/cash.png"),
-                    _MenuData("Cable TV", "assets/menus/cable.png"),
-                    _MenuData("Education", "assets/menus/electricity.png"),
-                    _MenuData("Hotel", "assets/menus/electricity.png"),
-                    _MenuData("Ticket", "assets/menus/electricity.png"),
-                  ],
-                  _isPayBillExpanded,
-                ),
-                _buildToggleButton(
-                  _isPayBillExpanded,
-                      () =>
-                      setState(() => _isPayBillExpanded = !_isPayBillExpanded),
-                ),
+                  // 3. Pay Bill Section
+                  _buildSectionHeader("Pay Bill"),
+                  _buildMenuGrid(
+                    [
+                      _MenuData("Electricity", "assets/menus/electricity.png"),
+                      _MenuData("Gas", "assets/menus/gas.png"),
+                      _MenuData("Water", "assets/menus/water.png"),
+                      _MenuData("Internet", "assets/menus/internet.png"),
+                      _MenuData("Telephone", "assets/menus/telephone.png"),
+                      _MenuData("Credit Card", "assets/menus/card.png"),
+                      _MenuData("Govt Fees", "assets/menus/cash.png"),
+                      _MenuData("Cable TV", "assets/menus/cable.png"),
+                      _MenuData("Education", "assets/menus/electricity.png"),
+                      _MenuData("Hotel", "assets/menus/electricity.png"),
+                      _MenuData("Ticket", "assets/menus/electricity.png"),
+                    ],
+                    _isPayBillExpanded,
+                  ),
+                  _buildToggleButton(
+                    _isPayBillExpanded,
+                        () =>
+                        setState(() => _isPayBillExpanded = !_isPayBillExpanded),
+                  ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // 4. Remittance Section
-                _buildSectionHeader("Remittance"),
-                _buildMenuGrid(
-                  [
-                    _MenuData("Payoneer", "assets/remittance/pioneer.png"),
-                    _MenuData("Paypal", "assets/remittance/paypal.png"),
-                    _MenuData("Wind", "assets/remittance/wind.png"),
-                    _MenuData("Wise", "assets/remittance/wise.png")
-                  ],
-                  _isRemittanceExpanded,
-                ),
-                // Only show button if there are more than 8 items
-                const SizedBox(height: 40),
-              ],
+                  // 4. Remittance Section
+                  _buildSectionHeader("Remittance"),
+                  _buildMenuGrid(
+                    [
+                      _MenuData("Payoneer", "assets/remittance/pioneer.png"),
+                      _MenuData("Paypal", "assets/remittance/paypal.png"),
+                      _MenuData("Wind", "assets/remittance/wind.png"),
+                      _MenuData("Wise", "assets/remittance/wise.png")
+                    ],
+                    _isRemittanceExpanded,
+                  ),
+                  // Only show button if there are more than 8 items
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -121,13 +217,16 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  "assets/profile.png",
-                  height: 48,
-                  width: 48,
-                  fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () => _scaffoldKey.currentState?.openDrawer(), // Open Drawer
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    "assets/profile.png",
+                    height: 48,
+                    width: 48,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -264,9 +363,10 @@ class _HomeScreenState extends State<HomeScreen> {
               AppNavigator.pushTo(RouteNames.send_money);
             }
             else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("${item.title} clicked")),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(content: Text("${item.title} clicked")),
+              // );
+              showCustomSnackBar(context, message: "${item.title} clicked", type: MessageType.success);
             }
           },
           child: Column(

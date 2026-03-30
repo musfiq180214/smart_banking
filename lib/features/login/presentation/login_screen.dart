@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:smart_banking/core/utils/enums.dart';
 import 'package:smart_banking/core/widgets/global_appbar.dart';
 
 import '../../../core/navigation/app_navigator.dart';
 import '../../../core/navigation/route_names.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/utils/custom_dialog.dart';
 import '../../../core/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -94,7 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigate to forgot pin screen if needed
+                  },
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: const Text("Forgot PIN?"),
                 ),
@@ -108,10 +112,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        AppNavigator.pushTo(
-                          RouteNames.landing,
-
-                        );
+                        // VALIDATION LOGIC
+                        if (_phoneController.text.length != 11) {
+                          showCustomSnackBar(
+                            context,
+                            message: "Phone number must be exactly 11 characters",
+                            type: MessageType.error,
+                          );
+                        } else if (_pinController.text.length != 6) {
+                          showCustomSnackBar(
+                            context,
+                            message: "PIN must be exactly 6 digits",
+                            type: MessageType.error,
+                          );
+                        } else {
+                          // Success - Proceed to landing
+                          AppNavigator.pushTo(RouteNames.landing);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,
@@ -120,11 +137,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        elevation: 0, // Flat design
+                        elevation: 0,
                       ),
-                      child: Text(context.t.log_in,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text(
+                        context.t.log_in, // Using direct string if context.t is not ready
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),

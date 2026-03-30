@@ -35,12 +35,12 @@ class _CashOutScreenState extends State<CashOutScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Selection Row (Agent vs ATM)
+            // Selection Row (Agent vs ATM)
             Row(
               children: [
                 Expanded(
-                  child: _buildSelectableBox(
-                    title: "Agent",
-                    icon: Icons.person_outline,
+                  child: _buildSelectableBox(title: "Agent",
+                    assetPath: "assets/cash_out/agent.png", // Update with your local path
                     isSelected: isAgentSelected,
                     onTap: () => setState(() => isAgentSelected = true),
                   ),
@@ -49,7 +49,7 @@ class _CashOutScreenState extends State<CashOutScreen> {
                 Expanded(
                   child: _buildSelectableBox(
                     title: "ATM",
-                    icon: Icons.atm,
+                    assetPath: "assets/cash_out/ATM.png", // Update with your local path
                     isSelected: !isAgentSelected,
                     onTap: () => setState(() => isAgentSelected = false),
                   ),
@@ -63,13 +63,40 @@ class _CashOutScreenState extends State<CashOutScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(20),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Did you face any issue? ",
+              style: TextStyle(color: Colors.black54, fontSize: 14),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Add your contact/support navigation logic here
+              },
+              child: const Text(
+                "Contact Us",
+                style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   // Common Selectable Box Component
+  // Common Selectable Box Component with Asset Images
   Widget _buildSelectableBox({
     required String title,
-    required IconData icon,
+    required String assetPath, // Changed from IconData
     required bool isSelected,
     required VoidCallback onTap,
   }) {
@@ -84,7 +111,17 @@ class _CashOutScreenState extends State<CashOutScreen> {
         ),
         child: Column(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : primaryColor),
+            // Using Image.asset instead of Icon
+            Image.asset(
+              assetPath,
+              height: 24, // Matches standard icon size
+              width: 24,
+              color: isSelected ? Colors.white : primaryColor, // Tints the asset
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.image_not_supported,
+                color: isSelected ? Colors.white : primaryColor,
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               title,
@@ -98,7 +135,6 @@ class _CashOutScreenState extends State<CashOutScreen> {
       ),
     );
   }
-
   // --- AGENT VIEW ---
   Widget _buildAgentView() {
     return Column(
@@ -164,7 +200,6 @@ class _CashOutScreenState extends State<CashOutScreen> {
   }
 
   // --- ATM VIEW ---
-  // --- ATM VIEW ---
   Widget _buildAtmView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,14 +213,14 @@ class _CashOutScreenState extends State<CashOutScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, // Centering row-wise
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
                 "Available Balance: ",
                 style: TextStyle(color: primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(width: 8), // Small gap between label and amount
+              const SizedBox(width: 8),
               const Text(
                 "139,999 TK",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -195,17 +230,27 @@ class _CashOutScreenState extends State<CashOutScreen> {
         ),
         const SizedBox(height: 25),
 
-        const Text(
-          "Search for Partner Bank",
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+        // NEW SEARCH INPUT FIELD
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: "Search for Partner Bank",
+              hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+
+            ),
+          ),
         ),
         const Divider(height: 20),
 
         // Bank List
-        _bankListItem(
-            "Basic Bank", "Dhanmondi", "assets/banks/bank_1.png"),
-        _bankListItem(
-            "Brack Bangla", "Gulshan", "assets/banks/bank_2.png"),
+        _bankListItem("Basic Bank", "Dhanmondi", "assets/banks/bank_1.png"),
+        _bankListItem("Brack Bangla", "Gulshan", "assets/banks/bank_2.png"),
         _bankListItem("Islamic Bank", "Uttara", "assets/banks/bank_3.png"),
       ],
     );

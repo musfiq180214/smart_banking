@@ -171,7 +171,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
             Image.asset(assetPath, height: 28, width: 28),
             const SizedBox(width: 12),
 
-            // 2. The Title (Center - Expanded to push radio to right)
+            // 2. The Title (Center)
             Expanded(
               child: Text(
                 title,
@@ -190,8 +190,9 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? primaryColor : Colors.grey.shade300,
-                  width: 2,
+                  // Use primaryColor for both, but change width for 'thin' effect
+                  color: primaryColor,
+                  width: isSelected ? 2 : 1,
                 ),
                 color: isSelected ? primaryColor : Colors.transparent,
               ),

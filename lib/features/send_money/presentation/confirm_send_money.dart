@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/navigation/app_navigator.dart';
+import '../../../core/navigation/route_names.dart';
 import '../../../core/theme/colors.dart';
 
 class ConfirmSendMoneyScreen extends StatefulWidget {
@@ -194,13 +196,39 @@ class _ConfirmSendMoneyScreenState extends State<ConfirmSendMoneyScreen> {
                               const SizedBox(height: 10),
 
                               // 3. Success Detail Text
-                              Text(
-                                "You have successfully Sent TK ${_amountController.text}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey.shade600,
-                                ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "You have successfully",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Sent ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        "TK ${_amountController.text}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xFFFFA530),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 30),
 
@@ -209,10 +237,9 @@ class _ConfirmSendMoneyScreenState extends State<ConfirmSendMoneyScreen> {
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    // Navigate back to home or clear stack
-                                    Navigator.of(context).pop(); // Closes Dialog
-                                    Navigator.of(context).pop(); // Closes Confirm Screen
-                                    // Add your Home navigation logic here if needed
+                                    AppNavigator.pushTo(
+                                      RouteNames.landing,
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: primaryColor,
