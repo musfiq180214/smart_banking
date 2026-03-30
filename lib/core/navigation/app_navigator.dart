@@ -9,6 +9,7 @@ import 'package:smart_banking/features/send_money/presentation/confirm_send_mone
 import 'package:smart_banking/features/sign_up/presentation/otp_confirmation.dart';
 
 import '../../features/login/presentation/login_screen.dart';
+import '../../features/onboarding/presentation/onboarding_stepper.dart';
 import '../../features/onboarding/presentation/splash_screen.dart';
 import '../../features/send_money/presentation/send_money_screen.dart';
 import '../../features/sign_up/presentation/signup_screen.dart';
@@ -74,6 +75,7 @@ final List<AppRoute> appRoutes = [
       }
 
   ),
+  AppRoute(path: RouteNames.onboarding, builder: (_, __) => const OnBoardingScreen()),
 ];
 
 final goRouterProvider = Provider<GoRouter>((ref) {

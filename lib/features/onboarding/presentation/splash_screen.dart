@@ -50,7 +50,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     //   AppNavigator.goTo(RouteNames.landing);
     // }
 
-    AppNavigator.goTo(RouteNames.login);
+    AppNavigator.goTo(RouteNames.onboarding);
 
     // AppLogger.i(
     //   "Splash USER TYPE set to navigate: ${ref.read(userTypeProvider)}",
