@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_banking/core/navigation/route_names.dart';
 import 'package:smart_banking/features/add_money/presentation/add_money_screen.dart';
 import 'package:smart_banking/features/cash_out/presentation/cash_out_screen.dart';
+import 'package:smart_banking/features/cash_out/presentation/confirm_cash_out_screen.dart';
 import 'package:smart_banking/features/landing/presentation/landing_screen.dart';
 import 'package:smart_banking/features/send_money/presentation/confirm_send_money.dart';
 import 'package:smart_banking/features/sign_up/presentation/otp_confirmation.dart';
@@ -72,6 +73,15 @@ final List<AppRoute> appRoutes = [
     final recipientNumber = state.extra as String? ?? "";
     return
         ConfirmSendMoneyScreen(recipientNumber: recipientNumber);
+      }
+
+  ),
+  AppRoute(path: RouteNames.confirm_cash_out,
+
+      builder: (_, state) {
+        final recipientNumber = state.extra as String? ?? "";
+        return
+          ConfirmCashOutScreen(recipientNumber: recipientNumber);
       }
 
   ),

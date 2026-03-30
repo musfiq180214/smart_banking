@@ -9,4 +9,5 @@ abstract class RouteNames {
   static const String send_money = '/send_money';
   static const String confirm_send_money = '/confirm_send_money';
   static const String onboarding = '/onboarding';
+  static const String confirm_cash_out = '/confirm_cash_out';
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:smart_banking/core/theme/colors.dart';
 
 import '../../../core/navigation/app_navigator.dart';
+import '../../../core/navigation/route_names.dart';
+import '../../../core/utils/custom_dialog.dart';
+import '../../../core/utils/enums.dart';
 
 class CashOutScreen extends StatefulWidget {
   const CashOutScreen({super.key});
@@ -12,7 +15,12 @@ class CashOutScreen extends StatefulWidget {
 
 class _CashOutScreenState extends State<CashOutScreen> {
   bool isAgentSelected = true; // Initial state: Agent selected
-
+  final TextEditingController _agentNumberController = TextEditingController(); // Add this line
+  @override
+  void dispose() {
+    _agentNumberController.dispose(); // Clean up controller
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +68,9 @@ class _CashOutScreenState extends State<CashOutScreen> {
 
             // Conditional Content
             isAgentSelected ? _buildAgentView() : _buildAtmView(),
+
+            const SizedBox(height: 30),
+
           ],
         ),
       ),
@@ -148,17 +159,41 @@ class _CashOutScreenState extends State<CashOutScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
+            controller: _agentNumberController,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: "Input Agent Number",
               hintStyle: TextStyle(color: Colors.grey),
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
+              // Inside _buildAgentView -> TextField -> decoration
+              suffixIcon: Row(mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.chevron_right, color: primaryColor),
-                  const SizedBox(width: 10),
-                  Icon(
-                      Icons.contact_page_outlined, color: primaryColor),
+                  IconButton(
+                    onPressed: () {
+                      if (_agentNumberController.text.length == 11) {
+                        // Success navigation
+                        AppNavigator.pushTo(
+                          RouteNames.confirm_cash_out,
+                          extra: _agentNumberController.text,
+                        );
+                      } else {
+                        // Explicit Error Reporting using your helper
+                        showCustomSnackBar(
+                          context,
+                          message: "Please enter a valid 11-digit Agent number",
+                          type: MessageType.error,
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.chevron_right, color: primaryColor),
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () {
+                      // Logic for contacts
+                    },
+                    icon: const Icon(Icons.contact_page_outlined, color: primaryColor),
+                  ),
                 ],
               ),
             ),
@@ -188,13 +223,12 @@ class _CashOutScreenState extends State<CashOutScreen> {
         const SizedBox(height: 25),
 
         _sectionTitle("Recent Contacts"),
-        _contactItem("Samantha", "Bank - 098734228756"),
-        _contactItem("Rose Hope", "Bank - 098734228758"),
+        _contactItem("Samantha", "Bank - 098734228756", "01980450024"),
+        _contactItem("Rose Hope", "Bank - 098734228758", "01980450024"),
 
         const SizedBox(height: 15),
         _sectionTitle("All Contacts"),
-        _contactItem("Andrea Summer", "Bank - 0987 3422 8756"),
-        _contactItem("Karen William", "Bank - 0987 3422 8756"),
+        _contactItem("Andrea Summer", "Bank - 098734228756", "01980450024"),
       ],
     );
   }
@@ -265,14 +299,13 @@ class _CashOutScreenState extends State<CashOutScreen> {
     );
   }
 
-  Widget _contactItem(String name, String detail) {
-    return ListTile(contentPadding: EdgeInsets.zero,
+  Widget _contactItem(String name, String detail, String phoneNumber) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         radius: 22,
         backgroundColor: Colors.blue.shade50,
-
-        // Or keep the letter-based profile icon:
-        child: Icon(Icons.person, color: Colors.grey)
+        child: const Icon(Icons.person, color: Colors.grey),
       ),
       title: Text(
         name,
@@ -282,58 +315,67 @@ class _CashOutScreenState extends State<CashOutScreen> {
         detail,
         style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
       ),
-      // trailing: const Icon(
-      //     Icons.arrow_forward_ios, size: 14, color: Colors.grey),
       onTap: () {
-        // Add navigation or selection logic here
+        setState(() {
+          // Only updates the input field, does NOT navigate
+          _agentNumberController.text = phoneNumber;
+        });
       },
     );
   }
 
   Widget _bankListItem(String title, String branch, String assetPath) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 16)),
-              Row(
-                children: [
-                  Text("Branch Name: ",style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                  Text(branch,
-                      style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                ],
-              ),
-            ],
-          ),
-
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              shape: BoxShape.circle,
+    return GestureDetector(
+      onTap: () {
+        // Navigates to confirmation screen when a bank is tapped
+        AppNavigator.pushTo(
+          RouteNames.confirm_cash_out,
+          extra: title,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 16)),
+                Row(
+                  children: [
+                    const Text("Branch Name: ", style: TextStyle(color: Colors.grey, fontSize: 13)),
+                    Text(branch,
+                        style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  ],
+                ),
+              ],
             ),
-            child: ClipOval(
-              child: Image.asset(
-                assetPath,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.account_balance, color: Colors.grey),
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                shape: BoxShape.circle,
               ),
-            ),
-          )
-
-        ],
+              child: ClipOval(
+                child: Image.asset(
+                  assetPath,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.account_balance, color: Colors.grey),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
