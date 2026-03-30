@@ -4,6 +4,7 @@ import '../../../core/navigation/route_names.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/utils/custom_dialog.dart';
 import '../../../core/utils/enums.dart';
+import '../../../core/utils/helper.dart';
 import '../../../core/widgets/language_switch.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    _drawerItem(Icons.home, "Home"),
+                    _drawerItem(Icons.home, context.t.home),
                     _drawerItem(Icons.person, "Profile"),
                     _drawerItem(Icons.receipt_long, "Statements"),
                     _drawerItem(Icons.speed, "Limits"),
