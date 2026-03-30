@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_banking/core/navigation/route_names.dart';
+import 'package:smart_banking/features/cash_out/presentation/cash_out_screen.dart';
 import 'package:smart_banking/features/landing/presentation/landing_screen.dart';
 import 'package:smart_banking/features/sign_up/presentation/otp_confirmation.dart';
 
@@ -58,6 +59,7 @@ final List<AppRoute> appRoutes = [
     },
   ),
   AppRoute(path: RouteNames.landing, builder: (_, __) => const LandingScreen()),
+  AppRoute(path: RouteNames.cash_out, builder: (_, __) => const CashOutScreen())
 ];
 
 final goRouterProvider = Provider<GoRouter>((ref) {

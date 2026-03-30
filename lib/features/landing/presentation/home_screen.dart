@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/navigation/app_navigator.dart';
+import '../../../core/navigation/route_names.dart';
 import '../../../core/theme/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -236,41 +238,51 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMenuGrid(List<_MenuData> items, bool isExpanded) {
-    int displayCount = isExpanded ? items.length : (items.length > 8 ? 8 : items
-        .length);
+    int displayCount = isExpanded ? items.length : (items.length > 8 ? 8 : items.length);
 
     return GridView.builder(
       padding: EdgeInsets.zero,
-      // Ensure no internal padding
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
-        mainAxisSpacing: 0, // Reduced from 10 to 0 or a very small number
+        mainAxisSpacing: 0,
         crossAxisSpacing: 10,
-        childAspectRatio: 0.85, // Increased slightly to reduce empty space at the bottom of cells
+        childAspectRatio: 0.85,
       ),
       itemCount: displayCount,
       itemBuilder: (context, index) {
-        return Column(
-          mainAxisSize: MainAxisSize.min, // Ensure column takes minimum space
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(12),
+        final item = items[index];
+        return GestureDetector(
+          onTap: () {
+            if (item.title == "Cash Out") {
+              AppNavigator.goTo(RouteNames.cash_out);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("${item.title} clicked")),
+              );
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Image.asset(item.imagePath, height: 60, width: 60),
               ),
-              child: Image.asset(items[index].imagePath, height: 60, width: 60),
-            ),
-            const SizedBox(height: 4), // Small fixed gap between icon and text
-            Text(
-              items[index].title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                item.title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
         );
       },
     );
