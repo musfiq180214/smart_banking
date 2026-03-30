@@ -260,6 +260,9 @@ class _HomeScreenState extends State<HomeScreen> {
             }else if (item.title == "Add Money") {
               AppNavigator.pushTo(RouteNames.add_money);
             }
+            else if (item.title == "Send Money") {
+              AppNavigator.pushTo(RouteNames.send_money);
+            }
             else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("${item.title} clicked")),

@@ -108,44 +108,43 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
     );
   }
 
-  // Top Level Selectable Box (Same style as Cash Out)
   Widget _buildMainSelectableBox({
-  required String title,
-  required String iconPath,
-  required bool isSelected,
-  required VoidCallback onTap,
-}) {
-return GestureDetector(
-onTap: onTap,
-child: Container(
-padding: const EdgeInsets.symmetric(vertical: 20),
-decoration: BoxDecoration(
-color: isSelected ? primaryColor : Colors.white,
-borderRadius: BorderRadius.circular(12),
-border: Border.all(color: primaryColor, width: 1.5),
-),
-child: Column(
-children: [
-Image.asset(
-iconPath,
-height: 32,
-width: 32,
-// Applies white if selected, otherwise uses the theme's primaryColor
-color: isSelected ? Colors.white : primaryColor,
-),
-const SizedBox(height: 8),
-Text(
-title,
-style: TextStyle(
-color: isSelected ? Colors.white : primaryColor,
-fontWeight: FontWeight.bold,
-),
-),
-],
-),
-),
-);
-}
+    required String title,
+    required String iconPath,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+          color: isSelected ? primaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: primaryColor, width: 1.5),
+        ),
+        child: Column(
+          children: [
+            Image.asset(
+              iconPath,
+              height: 32,
+              width: 32,
+              // Icon turns white when the background is blue (selected)
+              color: isSelected ? Colors.white : primaryColor,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? Colors.white : primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   // Source Option Row (Vertical selection with radio-circle at the right)
   Widget _buildSourceOption({
     required int index,
