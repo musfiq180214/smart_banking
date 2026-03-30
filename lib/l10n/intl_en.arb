@@ -1,0 +1,18 @@
+{
+    "@@locale": "en",
+    "sign_in": "Sign In",
+    "log_in": "Log In",
+    "register": "Register",
+    "home": "Home",
+    "guest": "Guest",
+    "guest_other": "Guest Other",
+    "guest_home": "Guest Home",
+    "welcome_guest": "Welcome Guest",
+    "welcome_guest_another": "Welcome Guest to other screen",
+    "please_enter_username": "Please enter your user name",
+    "enter_username": " Enter Username",
+    "please_enter_pass": "Enter Password",
+    "new_to_app": "New to this app?",
+    "refresh": "Refresh",
+    "create_account": "Create an account"
+}

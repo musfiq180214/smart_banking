@@ -1,0 +1,18 @@
+{
+    "@@locale": "bn",
+    "sign_in": "সাইন ইন",
+    "log_in": "লগ ইন",
+    "register": "রেজিস্টার",
+    "home": "হোম",
+    "guest": "গেস্ট",
+    "guest_home": "গেস্ট হোম",
+    "guest_other": "গেস্ট অন্যান্য",
+    "welcome_guest": "স্বাগতম গেস্ট",
+    "welcome_guest_another": "অন্য স্ক্রীন এ স্বাগতম গেস্ট",
+    "please_enter_username": "অনুগ্রহ পূর্বক ইউজারনেম প্রবেশ করুন",
+    "enter_username": " ইউজারনেম প্রবেশ করুন",
+    "please_enter_pass": "পাসওয়ার্ড প্রবেশ করুন",
+    "new_to_app": "এই অ্যাপ এ নতুন?",
+    "refresh": "রিফ্রেশ",
+    "create_account": "একাউন্ট তৈরি করুন"
+}
